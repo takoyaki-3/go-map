@@ -15,12 +15,15 @@ func main() {
 	// Graph load
 	fmt.Println("Graph load")
 	g, err := gm.LoadOSM("./sample/Tokyo.osm.pbf")
+	// g, err := gm.LoadFromPath("./sample/Tokyo.gomap.pbf")
 	if err != nil {
 		log.Fatalln(err)
 	}
 	gm.GetLargestGraph(g)
 
-	gm.DumpGeoJSON(g,"./sample/nodes.geojson","./sample/edges.geojson")
+	gm.DumpGeoJSON(g, "./sample/nodes.geojson", "./sample/edges.geojson")
+	gm.DumpCSV(g, "./sample/nodes.csv", "./sample/edges.csv")
+	gm.DumpToFile(g, "./sample/Tokyo.gomap.pbf")
 	// g := osm.Load("./kanto-latest.osm.pbf")
 	// g := geojson.Load("./kanto-lines.geojson")
 
@@ -67,7 +70,7 @@ func main() {
 		}
 
 		// Search
-		o,err := gm.Search(g, q)
+		o, err := gm.Search(g, q)
 		if err != nil {
 			fmt.Println(err)
 		}

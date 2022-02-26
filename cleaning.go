@@ -1,7 +1,6 @@
 package gomap
 
-import (
-)
+import ()
 
 func GetLargestGraph(g *Graph) {
 
@@ -66,7 +65,7 @@ func GetLargestGraph(g *Graph) {
 
 	newG.FromEdges = make([][]int, len(newG.Nodes))
 	newG.ToEdges = make([][]int, len(newG.Nodes))
-	for ei,e:=range newG.Edges{
+	for ei, e := range newG.Edges {
 		newG.FromEdges[e.FromNode] = append(newG.FromEdges[e.FromNode], ei)
 		newG.ToEdges[e.ToNode] = append(newG.ToEdges[e.ToNode], ei)
 	}

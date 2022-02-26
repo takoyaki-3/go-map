@@ -18,13 +18,13 @@ type Output struct {
 }
 
 type cfb struct {
-	cost float64
-	flag bool
+	cost   float64
+	flag   bool
 	before int
 }
 
 //
-func Search(g *Graph, query Query) (Output,error) {
+func Search(g *Graph, query Query) (Output, error) {
 
 	q := prioque.NewMinSet()
 	cfbs := make([]cfb, len(g.Nodes))
@@ -35,7 +35,7 @@ func Search(g *Graph, query Query) (Output,error) {
 	}
 
 	if len(g.Nodes) <= int(query.From) || len(g.Nodes) <= int(query.To) {
-		return Output{},errors.New("query node index not found.")
+		return Output{}, errors.New("query node index not found.")
 	}
 
 	cfbs[query.From].cost = 0.0
@@ -61,7 +61,7 @@ func Search(g *Graph, query Query) (Output,error) {
 			if cfbs[eto].flag {
 				continue
 			}
-			etoCost := cfbs[pos].cost+e.Weight
+			etoCost := cfbs[pos].cost + e.Weight
 			if cfbs[eto].cost <= etoCost {
 				continue
 			}
@@ -98,7 +98,7 @@ func Search(g *Graph, query Query) (Output,error) {
 
 		bef := cfbs[pos].before
 		if bef == -1 {
-			return Output{},errors.New("path not found")
+			return Output{}, errors.New("path not found")
 		}
 		for bef != -2 {
 			out.Nodes = append([]int{bef}, out.Nodes...)
@@ -106,7 +106,7 @@ func Search(g *Graph, query Query) (Output,error) {
 		}
 	}
 
-	return out,nil
+	return out, nil
 }
 
 func Voronoi(g *Graph, bases []int) map[int]int {
@@ -186,8 +186,8 @@ func AllDistance(g *Graph, base []int) []float64 {
 			q.AddVal(eto, cfbs[eto].cost)
 		}
 	}
-	cost := make([]float64,len(g.Nodes))
-	for k,v:=range cfbs{
+	cost := make([]float64, len(g.Nodes))
+	for k, v := range cfbs {
 		cost[k] = v.cost
 	}
 	return cost
