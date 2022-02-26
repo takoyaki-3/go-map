@@ -18,6 +18,9 @@ func main() {
 	if err != nil {
 		log.Fatalln(err)
 	}
+	gm.GetLargestGraph(g)
+
+	gm.DumpGeoJSON(g,"./sample/nodes.geojson","./sample/edges.geojson")
 	// g := osm.Load("./kanto-latest.osm.pbf")
 	// g := geojson.Load("./kanto-lines.geojson")
 
