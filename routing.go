@@ -1,6 +1,7 @@
 package gomap
 
 import (
+	"errors"
 	"math"
 
 	"github.com/takoyaki-3/go-map/prioque"
@@ -16,39 +17,39 @@ type Output struct {
 	Cost  float64
 }
 
-//
-func Search(g *Graph, query Query) Output {
+type cfb struct {
+	cost float64
+	flag bool
+	before int
+}
 
-	l := len(g.Edges)
-	if l < len(g.Nodes) {
-		l = len(g.Nodes)
-	}
+//
+func Search(g *Graph, query Query) (Output,error) {
 
 	q := prioque.NewMinSet()
-	cost := make([]float64, l)
-	flag := make([]bool, l)
-	before := make([]int, l)
+	cfbs := make([]cfb, len(g.Nodes))
 
-	for k, _ := range cost {
-		cost[k] = math.MaxFloat64
+	for k, _ := range cfbs {
+		cfbs[k].cost = math.MaxFloat64
+		cfbs[k].before = -1
 	}
 
-	if len(g.Edges) <= int(query.From) || len(g.Edges) <= int(query.To) {
-		return Output{}
+	if len(g.Nodes) <= int(query.From) || len(g.Nodes) <= int(query.To) {
+		return Output{},errors.New("query node index not found.")
 	}
 
-	cost[query.From] = 0.0
-	before[query.From] = -2
+	cfbs[query.From].cost = 0.0
+	cfbs[query.From].before = -2
 
 	q.AddVal(query.From, 0.0)
 
 	var pos int
 	for q.Len() > 0 {
 		pos = q.GetMin()
-		if flag[pos] {
+		if cfbs[pos].flag {
 			continue
 		}
-		flag[pos] = true
+		cfbs[pos].flag = true
 
 		if pos == query.To {
 			break
@@ -57,68 +58,71 @@ func Search(g *Graph, query Query) Output {
 		for _, eid := range g.FromEdges[pos] {
 			e := g.Edges[eid]
 			eto := e.ToNode
-			if flag[eto] {
+			if cfbs[eto].flag {
 				continue
 			}
-			if cost[eto] <= cost[pos]+e.Weight {
+			etoCost := cfbs[pos].cost+e.Weight
+			if cfbs[eto].cost <= etoCost {
 				continue
 			}
-			cost[eto] = cost[pos] + e.Weight
+			cfbs[eto].cost = etoCost
+			cfbs[eto].before = pos
 			if len(e.ViaNodes) == 0 {
-				before[eto] = pos
+				cfbs[eto].before = pos
 			} else {
 				if eto != e.ViaNodes[len(e.ViaNodes)-1] {
-					before[eto] = e.ViaNodes[len(e.ViaNodes)-1]
+					cfbs[eto].before = e.ViaNodes[len(e.ViaNodes)-1]
 				}
 				if e.ViaNodes[0] != pos {
-					before[e.ViaNodes[0]] = pos
+					cfbs[e.ViaNodes[0]].before = pos
 				}
 				for k, v := range e.ViaNodes {
 					if k == 0 {
 						continue
 					}
 					if v != e.ViaNodes[k-1] {
-						before[v] = e.ViaNodes[k-1]
+						cfbs[v].before = e.ViaNodes[k-1]
 					}
 				}
 			}
-			q.AddVal(eto, cost[eto])
+			q.AddVal(eto, etoCost)
 		}
 	}
 
 	// 出力
+	pos = query.To
 	out := Output{}
 	if pos == query.To {
-		out.Cost = cost[pos]
-		out.Nodes = append(out.Nodes, pos)
+		out.Cost = cfbs[pos].cost
+		out.Nodes = append([]int{pos}, out.Nodes...)
 
-		bef := before[pos]
+		bef := cfbs[pos].before
 		if bef == -1 {
-			return Output{}
+			return Output{},errors.New("path not found")
 		}
 		for bef != -2 {
 			out.Nodes = append([]int{bef}, out.Nodes...)
-			bef = before[bef]
+			bef = cfbs[bef].before
 		}
 	}
 
-	return out
+	return out,nil
 }
 
 func Voronoi(g *Graph, bases []int) map[int]int {
 	// initialization
 	q := prioque.NewMinSet()
-	cost := make([]float64, len(g.Edges))
-	flag := make([]bool, len(g.Edges))
+	cfbs := make([]cfb, len(g.Nodes))
 	start_group := map[int]int{}
 
 	counter := 0
-	for k, _ := range cost {
-		cost[k] = math.MaxFloat64
+	for k, _ := range cfbs {
+		cfbs[k].before = -1
+		cfbs[k].cost = math.MaxFloat64
 	}
 
 	for _, v := range bases {
-		cost[v] = 0.0
+		cfbs[v].cost = 0.0
 		q.AddVal(v, 0.0)
 		start_group[int(v)] = counter % 20
 		counter++
@@ -126,24 +130,24 @@ func Voronoi(g *Graph, bases []int) map[int]int {
 
 	for q.Len() > 0 {
 		pos := q.GetMin()
-		if flag[pos] {
+		if cfbs[pos].flag {
 			continue
 		}
-		flag[pos] = true
+		cfbs[pos].flag = true
 
 		// グラフ拡張処理
 		for _, eid := range g.FromEdges[pos] {
 			e := g.Edges[eid]
 			eto := e.ToNode
-			if flag[eto] {
+			if cfbs[eto].flag {
 				continue
 			}
-			if cost[eto] <= cost[pos]+e.Weight {
+			if cfbs[eto].cost <= cfbs[pos].cost+e.Weight {
 				continue
 			}
-			cost[eto] = cost[pos] + e.Weight
+			cfbs[eto].cost = cfbs[pos].cost + e.Weight
 			start_group[eto] = start_group[pos]
-			q.AddVal(eto, cost[pos]+e.Weight)
+			q.AddVal(eto, cfbs[pos].cost+e.Weight)
 		}
 	}
 
@@ -152,36 +156,39 @@ func Voronoi(g *Graph, bases []int) map[int]int {
 
 func AllDistance(g *Graph, base []int) []float64 {
 	q := prioque.NewMinSet()
-	cost := make([]float64, len(g.Edges))
-	flag := make([]bool, len(g.Edges))
+	cfbs := make([]cfb, len(g.Nodes))
 
-	for k, _ := range cost {
-		cost[k] = math.MaxFloat64
+	for k, _ := range cfbs {
+		cfbs[k].cost = math.MaxFloat64
 	}
 
 	for _, v := range base {
-		cost[v] = 0.0
+		cfbs[v].cost = 0.0
 		q.AddVal(v, 0.0)
 	}
 
 	for q.Len() > 0 {
 		pos := q.GetMin()
-		if flag[pos] {
+		if cfbs[pos].flag {
 			continue
 		}
-		flag[pos] = true
+		cfbs[pos].flag = true
 		for _, eid := range g.FromEdges[pos] {
 			e := g.Edges[eid]
 			eto := e.ToNode
-			if flag[eto] {
+			if cfbs[eto].flag {
 				continue
 			}
-			if cost[eto] <= cost[pos]+e.Weight {
+			if cfbs[eto].cost <= cfbs[pos].cost+e.Weight {
 				continue
 			}
-			cost[eto] = cost[pos] + e.Weight
-			q.AddVal(eto, cost[eto])
+			cfbs[eto].cost = cfbs[pos].cost + e.Weight
+			q.AddVal(eto, cfbs[eto].cost)
 		}
+	}
+	cost := make([]float64,len(g.Nodes))
+	for k,v:=range cfbs{
+		cost[k] = v.cost
 	}
 	return cost
 }

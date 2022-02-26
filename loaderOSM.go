@@ -35,15 +35,15 @@ func LoadOSM(filename string, opts ...option) (*Graph, error) {
 	}
 
 	exclusionList := map[string]bool{}
-	// exclusionList["motorway"] = true
-	// exclusionList["bus_guideway"] = true
-	// exclusionList["raceway"] = true
-	// exclusionList["busway"] = true
-	// exclusionList["cycleway"] = true
-	// exclusionList["proposed"] = true
-	// exclusionList["construction"] = true
-	// exclusionList["motorway_junction"] = true
-	// exclusionList["platform"] = true
+	exclusionList["motorway"] = true
+	exclusionList["bus_guideway"] = true
+	exclusionList["raceway"] = true
+	exclusionList["busway"] = true
+	exclusionList["cycleway"] = true
+	exclusionList["proposed"] = true
+	exclusionList["construction"] = true
+	exclusionList["motorway_junction"] = true
+	exclusionList["platform"] = true
 
 	parms := &Opts{
 		ExclusionList: exclusionList,
@@ -108,6 +108,10 @@ func LoadOSM(filename string, opts ...option) (*Graph, error) {
 			e.FromNode = node1
 			e.ToNode = node2
 			e.Type = edgeTypes[wid]
+			g.Edges = append(g.Edges, e)
+
+			e.FromNode = node2
+			e.ToNode = node1
 			g.Edges = append(g.Edges, e)
 		}
 	}

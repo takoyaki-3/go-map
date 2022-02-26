@@ -16,7 +16,7 @@ func NewMinSet() *MinSet {
 	s := new(MinSet)
 	s.last_num = 0
 	s.n = 0
-	s.C = 2048
+	s.C = 1
 	s.que = make([][]costque, s.C)
 	return s
 }
@@ -42,7 +42,7 @@ func (s *MinSet) GetMin() int {
 				minI = j
 			}
 		}
-		if int(s.que[i][minI].num) != int(s.last_num) {
+		if int(s.que[i][minI].num) != s.last_num {
 			s.last_num++
 			continue
 		}

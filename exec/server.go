@@ -67,7 +67,10 @@ func main() {
 		}
 
 		// Search
-		o := gm.Search(g, q)
+		o,err := gm.Search(g, q)
+		if err != nil {
+			fmt.Println(err)
+		}
 
 		if len(o.Nodes) == 0 {
 			fmt.Println("route not found")
