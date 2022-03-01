@@ -23,6 +23,13 @@ func (g *Graph) CutGraph(leftUp Node, rightDown Node) error {
 			}
 		}
 	}
+	for _,s := range g.Stops {
+		if nid,ok:=g.stopId2node[s.ID];ok{
+			newG.stopId2node[s.ID] = nid
+			newG.stopId2index[s.ID] = len(newG.Stops)
+			newG.Stops = append(newG.Stops, s)
+		}
+	}
 
 	*g = newG
 
