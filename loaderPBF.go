@@ -12,6 +12,8 @@ import (
 func LoadFromPath(filename string) (*Graph, error) {
 
 	g := new(Graph)
+	g.stopId2index = map[string]int{}
+	g.stopId2node = map[string]int{}
 
 	// Read the existing graph.
 	in, err := ioutil.ReadFile(filename)
