@@ -5,7 +5,7 @@ import (
 	json "github.com/takoyaki-3/go-json"
 )
 
-func MakeLineString(g *Graph, latlons []int) (string, error) {
+func (g *Graph) MakeLineString(latlons []int) (string, error) {
 
 	var coordinates [][]float64
 

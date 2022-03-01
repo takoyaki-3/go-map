@@ -19,11 +19,11 @@ func main() {
 	if err != nil {
 		log.Fatalln(err)
 	}
-	gm.GetLargestGraph(g)
+	g.GetLargestGraph()
 
-	gm.DumpGeoJSON(g, "./sample/nodes.geojson", "./sample/edges.geojson", "./sample/stops.geojson")
-	gm.DumpCSV(g, "./sample/nodes.csv", "./sample/edges.csv", "./sample/stops.csv")
-	gm.DumpToFile(g, "./sample/Tokyo.gomap.pbf")
+	g.DumpGeoJSON("./sample/nodes.geojson", "./sample/edges.geojson", "./sample/stops.geojson")
+	g.DumpCSV("./sample/nodes.csv", "./sample/edges.csv", "./sample/stops.csv")
+	g.DumpToFile("./sample/Tokyo.gomap.pbf")
 	// g := osm.Load("./kanto-latest.osm.pbf")
 	// g := geojson.Load("./kanto-lines.geojson")
 
@@ -70,7 +70,7 @@ func main() {
 		}
 
 		// Search
-		o, err := gm.Search(g, q)
+		o, err := g.Search(q)
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -81,7 +81,7 @@ func main() {
 		}
 
 		// Make GeoJSON
-		rawJSON, err := gm.MakeLineString(g, o.Nodes)
+		rawJSON, err := g.MakeLineString(o.Nodes)
 		if err != nil {
 			fmt.Println(err)
 			return

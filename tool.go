@@ -1,6 +1,6 @@
 package gomap
 
-func CutGraph(g *Graph, leftUp Node, rightDown Node) error {
+func (g *Graph) CutGraph(leftUp Node, rightDown Node) error {
 	old2new := map[int]int{}
 	newG := Graph{}
 	for old, v := range g.Nodes {

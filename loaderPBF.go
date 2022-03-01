@@ -74,7 +74,7 @@ func LoadFromPath(filename string) (*Graph, error) {
 }
 
 // Write to Protocol Buffer
-func DumpToFile(g *Graph, filename string) error {
+func (g *Graph) DumpToFile(filename string) error {
 	edges := []*pb.Edge{}
 	for _, v := range g.Edges {
 		edges = append(edges, &pb.Edge{

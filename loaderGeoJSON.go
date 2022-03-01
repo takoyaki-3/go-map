@@ -5,7 +5,7 @@ import (
 	json "github.com/takoyaki-3/go-json"
 )
 
-func DumpGeoJSON(g *Graph, nodeFileName, edgeFileName, stopFileName string) error {
+func (g *Graph) DumpGeoJSON(nodeFileName, edgeFileName, stopFileName string) error {
 
 	// 辺情報
 	fc := geojson.FeatureCollection{

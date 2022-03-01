@@ -24,7 +24,7 @@ type cfb struct {
 }
 
 //
-func Search(g *Graph, query Query) (Output, error) {
+func (g *Graph) Search(query Query) (Output, error) {
 
 	q := prioque.NewMinSet()
 	cfbs := make([]cfb, len(g.Nodes))
@@ -109,7 +109,7 @@ func Search(g *Graph, query Query) (Output, error) {
 	return out, nil
 }
 
-func Voronoi(g *Graph, bases []int) map[int]int {
+func (g *Graph) Voronoi(bases []int) map[int]int {
 	// initialization
 	q := prioque.NewMinSet()
 	cfbs := make([]cfb, len(g.Nodes))
@@ -154,7 +154,7 @@ func Voronoi(g *Graph, bases []int) map[int]int {
 	return start_group
 }
 
-func AllDistance(g *Graph, base []int) []float64 {
+func (g *Graph) AllDistance(base []int) []float64 {
 	q := prioque.NewMinSet()
 	cfbs := make([]cfb, len(g.Nodes))
 

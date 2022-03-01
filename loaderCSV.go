@@ -33,7 +33,7 @@ func LoadCSVWithStop(nodeFileName, edgeFileName, stopFileName string) (g *Graph,
 	return g, err
 }
 
-func DumpCSV(g *Graph, nodeFileName, edgeFileName, stopFileName string) error {
+func (g *Graph) DumpCSV(nodeFileName, edgeFileName, stopFileName string) error {
 	if err := csvtag.DumpToFile(g.Nodes, nodeFileName); err != nil {
 		return err
 	}
@@ -46,7 +46,7 @@ func DumpCSV(g *Graph, nodeFileName, edgeFileName, stopFileName string) error {
 	return nil
 }
 
-func (g Graph) AddStopsFromCSV(stopFileName string) (err error) {
+func (g *Graph) AddStopsFromCSV(stopFileName string) (err error) {
 	// 停留所情報読み込み
 	if ok := csvtag.LoadFromPath(stopFileName, &g.Stops); ok != nil {
 		return err

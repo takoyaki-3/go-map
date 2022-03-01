@@ -2,7 +2,7 @@ package gomap
 
 import ()
 
-func GetLargestGraph(g *Graph) {
+func (g *Graph) GetLargestGraph() {
 
 	flag := make([]int, len(g.Nodes))
 	nums := []int{}
