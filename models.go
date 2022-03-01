@@ -13,8 +13,15 @@ type Graph struct {
 	stopId2index map[string]int
 }
 
-func (g Graph) GetStop(stopId string) gtfs.Stop {
+func (g *Graph) GetStop(stopId string) gtfs.Stop {
 	return g.Stops[g.stopId2index[stopId]]
+}
+
+func (g *Graph) GetStopIndex(stopId string) int {
+	if v, ok := g.stopId2index[stopId]; ok {
+		return v
+	}
+	return -1
 }
 
 type Node struct {
