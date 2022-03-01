@@ -4,6 +4,7 @@ package pb;
 message Graph {
   repeated Node node = 1;
   repeated Edge edge = 2;
+  repeated Stop stop = 3;
 }
 
 message Edge {
@@ -19,6 +20,23 @@ message Node {
   double lat = 2;
   double lon = 3;
   string placeId = 4;
+}
+
+message Stop {
+  string stop_id = 1;
+  string stop_code = 2;
+  string stop_name = 3;
+  string stop_desc = 4;
+  double stop_lat = 5;
+  double stop_lon = 6;
+  string zone_id = 7;
+  string stop_url = 8;
+  string location_type = 9;
+  string parent_station = 10;
+  string stop_timezone = 11;
+  string wheelchair_boarding = 12;
+  string level_id = 13;
+  string platform_code = 14;
 }
 
 // protoc -I=./ --go_out=./ ./gomap.proto

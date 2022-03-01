@@ -4,6 +4,7 @@ import (
 	"io/ioutil"
 
 	"github.com/golang/protobuf/proto"
+	"github.com/takoyaki-3/go-gtfs"
 	"github.com/takoyaki-3/go-map/pb"
 )
 
@@ -48,6 +49,21 @@ func LoadFromPath(filename string) (*Graph, error) {
 		g.ToEdges[v.To] = append(g.ToEdges[v.To], ei)
 	}
 
+	for i,s := range graph.Stop {
+		g.Stops = append(g.Stops, gtfs.Stop{
+			ID: s.StopId,
+			Code: s.StopCode,
+			Name: s.StopName,
+			Description: s.StopDesc,
+			Latitude: s.StopLat,
+			Longitude: s.StopLon,
+			ZoneID: s.ZoneId,
+			Type: s.LocationType,
+			Parent: s.ParentStation,
+		})
+		g.stopId2index[s.StopId] = i
+	}
+
 	return g, nil
 }
 
@@ -70,6 +86,21 @@ func DumpToFile(g *Graph, filename string) error {
 			Lat:     v.Lat,
 			Lon:     v.Lon,
 			PlaceId: v.PlaceID,
+		})
+	}
+
+	stops := []*pb.Stop{}
+	for _,s := range g.Stops{
+		stops = append(stops, &pb.Stop{
+			StopId: s.ID,
+			StopCode: s.Code,
+			StopName: s.Name,
+			StopDesc: s.Description,
+			StopLat: s.Latitude,
+			StopLon: s.Longitude,
+			ZoneId: s.ZoneID,
+			LocationType: s.Type,
+			ParentStation: s.Parent,
 		})
 	}
 
