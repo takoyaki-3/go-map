@@ -115,6 +115,7 @@ func (g *Graph) DumpToFile(filename string) error {
 	graph := &pb.Graph{
 		Node: nodes,
 		Edge: edges,
+		Stop: stops,
 	}
 
 	// Write the new address book back to disk.
