@@ -21,8 +21,8 @@ func main() {
 	}
 	gm.GetLargestGraph(g)
 
-	gm.DumpGeoJSON(g, "./sample/nodes.geojson", "./sample/edges.geojson")
-	gm.DumpCSV(g, "./sample/nodes.csv", "./sample/edges.csv")
+	gm.DumpGeoJSON(g, "./sample/nodes.geojson", "./sample/edges.geojson", "./sample/stops.geojson")
+	gm.DumpCSV(g, "./sample/nodes.csv", "./sample/edges.csv", "./sample/stops.csv")
 	gm.DumpToFile(g, "./sample/Tokyo.gomap.pbf")
 	// g := osm.Load("./kanto-latest.osm.pbf")
 	// g := geojson.Load("./kanto-lines.geojson")

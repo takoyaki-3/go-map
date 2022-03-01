@@ -5,8 +5,9 @@ import (
 	json "github.com/takoyaki-3/go-json"
 )
 
-func DumpGeoJSON(g *Graph, nodeFileName, edgeFileName string) error {
+func DumpGeoJSON(g *Graph, nodeFileName, edgeFileName, stopFileName string) error {
 
+	// 辺情報
 	fc := geojson.FeatureCollection{
 		Type: "FeatureCollection",
 	}
@@ -23,11 +24,11 @@ func DumpGeoJSON(g *Graph, nodeFileName, edgeFileName string) error {
 		}
 		fc.Features = append(fc.Features, f)
 	}
-
 	if err := json.DumpToFile(fc, edgeFileName); err != nil {
 		return err
 	}
 
+	// 頂点情報
 	fc = geojson.FeatureCollection{
 		Type: "FeatureCollection",
 	}
@@ -42,6 +43,27 @@ func DumpGeoJSON(g *Graph, nodeFileName, edgeFileName string) error {
 		}
 		fc.Features = append(fc.Features, f)
 	}
+	if err := json.DumpToFile(fc, nodeFileName); err != nil {
+		return err
+	}
 
-	return json.DumpToFile(fc, nodeFileName)
+	// 停留所情報
+	fc = geojson.FeatureCollection{
+		Type: "FeatureCollection",
+	}
+	for _, s := range g.Stops {
+		geom := geojson.Geometry{
+			Type:        "Point",
+			Coordinates: []float64{s.Longitude, s.Latitude},
+		}
+		f := geojson.Feature{
+			Type:     "Feature",
+			Geometry: geom,
+		}
+		fc.Features = append(fc.Features, f)
+	}
+	if err := json.DumpToFile(fc, stopFileName); err != nil {
+		return err
+	}
+	return nil
 }
