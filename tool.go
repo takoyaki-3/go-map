@@ -11,6 +11,8 @@ func (g *Graph) CutGraph(leftUp Node, rightDown Node) error {
 			}
 		}
 	}
+	newG.FromEdges = make([][]int, len(newG.Nodes))
+	newG.ToEdges = make([][]int, len(newG.Nodes))
 	for _, e := range g.Edges {
 		if newFrom, ok := old2new[e.FromNode]; ok {
 			if newTo, ok := old2new[e.ToNode]; ok {
@@ -23,8 +25,8 @@ func (g *Graph) CutGraph(leftUp Node, rightDown Node) error {
 			}
 		}
 	}
-	for _,s := range g.Stops {
-		if nid,ok:=g.stopId2node[s.ID];ok{
+	for _, s := range g.Stops {
+		if nid, ok := g.stopId2node[s.ID]; ok {
 			newG.stopId2node[s.ID] = nid
 			newG.stopId2index[s.ID] = len(newG.Stops)
 			newG.Stops = append(newG.Stops, s)
