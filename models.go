@@ -11,6 +11,7 @@ type Graph struct {
 	ToEdges      [][]int
 	Stops        []gtfs.Stop
 	stopId2index map[string]int
+	stopId2node  map[string]int
 }
 
 func (g *Graph) GetStop(stopId string) gtfs.Stop {
@@ -19,6 +20,13 @@ func (g *Graph) GetStop(stopId string) gtfs.Stop {
 
 func (g *Graph) GetStopIndex(stopId string) int {
 	if v, ok := g.stopId2index[stopId]; ok {
+		return v
+	}
+	return -1
+}
+
+func (g *Graph) GetStopNode(stopId string) int {
+	if v, ok := g.stopId2node[stopId]; ok {
 		return v
 	}
 	return -1

@@ -64,6 +64,12 @@ func LoadFromPath(filename string) (*Graph, error) {
 		g.stopId2index[s.StopId] = i
 	}
 
+	for i, n := range g.Nodes {
+		if n.Type == "stop" {
+			g.stopId2node[n.PlaceID] = i
+		}
+	}
+
 	return g, nil
 }
 

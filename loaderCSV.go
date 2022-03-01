@@ -56,8 +56,8 @@ func (g Graph) AddStopsFromCSV(stopFileName string) (err error) {
 
 	// 停留所indexの作成
 	g.stopId2index = map[string]int{}
+	g.stopId2node = map[string]int{}
 	for i, s := range g.Stops {
-		g.stopId2index[s.ID] = i
 		n := Node{
 			Lat:     s.Latitude,
 			Lon:     s.Longitude,
@@ -65,6 +65,8 @@ func (g Graph) AddStopsFromCSV(stopFileName string) (err error) {
 			Type:    "stop",
 		}
 		ni := len(g.Nodes)
+		g.stopId2index[s.ID] = i
+		g.stopId2node[s.ID] = ni
 		g.Nodes = append(g.Nodes, n)
 
 		// 近くの道路へ接続
