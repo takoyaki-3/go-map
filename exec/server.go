@@ -29,7 +29,7 @@ func main() {
 
 	// Make index
 	fmt.Println("Make index")
-	h3indexes := gm.MakeH3Index(g, 6)
+	h3indexes := g.MakeH3Index(6)
 
 	// Start server
 	fmt.Println("start Server")
@@ -57,10 +57,10 @@ func main() {
 		q := gm.Query{}
 
 		// Find node
-		q.To = gm.FindNode(g, h3indexes, gm.Node{
+		q.To = g.FindNode(h3indexes, gm.Node{
 			Lat: parm_v["from_lat"],
 			Lon: parm_v["from_lon"]}, 6)
-		q.From = gm.FindNode(g, h3indexes, gm.Node{
+		q.From = g.FindNode(h3indexes, gm.Node{
 			Lat: parm_v["to_lat"],
 			Lon: parm_v["to_lon"]}, 6)
 
