@@ -46,3 +46,15 @@ type Edge struct {
 	Type     string  `csv:"type"`
 	ViaNodes []int
 }
+
+func (g *Graph) SetIndex() {
+	g.stopId2index = map[string]int{}
+	g.stopId2node = map[string]int{}
+
+	for i, s := range g.Stops {
+		g.stopId2index[s.ID] = i
+	}
+	for i, n := range g.Nodes {
+		g.stopId2node[n.PlaceID] = i
+	}
+}
