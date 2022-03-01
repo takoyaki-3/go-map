@@ -52,9 +52,32 @@ func (g Graph) AddStopsFromCSV(stopFileName string) (err error) {
 		return err
 	}
 
+	h3indexes := g.MakeH3Index(9)
+
 	// 停留所indexの作成
+	g.stopId2index = map[string]int{}
 	for i, s := range g.Stops {
 		g.stopId2index[s.ID] = i
+		n := Node{
+			Lat:     s.Latitude,
+			Lon:     s.Longitude,
+			PlaceID: s.ID,
+			Type:    "stop",
+		}
+		ni := len(g.Nodes)
+		g.Nodes = append(g.Nodes, n)
+
+		// 近くの道路へ接続
+		nearestNode := g.FindNode(h3indexes, n, 9)
+		if nearestNode < 0 {
+			continue
+		}
+		cost := HubenyDistance(g.Nodes[nearestNode], n)
+		g.Edges = append(g.Edges, Edge{
+			FromNode: nearestNode,
+			ToNode:   ni,
+			Weight:   cost,
+		})
 	}
 
 	return nil

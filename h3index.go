@@ -9,7 +9,7 @@ import (
 type UH3index uh3.H3Index
 type UH3indexes map[UH3index][]int
 
-func (g *Graph)MakeH3Index(resolution int) UH3indexes {
+func (g *Graph) MakeH3Index(resolution int) UH3indexes {
 	h3index := UH3indexes{}
 
 	for k, v := range g.Nodes {
@@ -25,7 +25,7 @@ func (g *Graph)MakeH3Index(resolution int) UH3indexes {
 	return h3index
 }
 
-func (g *Graph)FindNode(h3indexes UH3indexes, latlon Node, resolution int) int {
+func (g *Graph) FindNode(h3indexes UH3indexes, latlon Node, resolution int) int {
 	h3index := uh3.FromGeo(uh3.GeoCoord{
 		Latitude:  latlon.Lat,
 		Longitude: latlon.Lon}, resolution)
@@ -52,7 +52,7 @@ func (g *Graph)FindNode(h3indexes UH3indexes, latlon Node, resolution int) int {
 	return min_node
 }
 
-func (g *Graph)FindNodes(h3indexes UH3indexes, latlon Node, resolution int, r float64) []int {
+func (g *Graph) FindNodes(h3indexes UH3indexes, latlon Node, resolution int, r float64) []int {
 	h3index := uh3.FromGeo(uh3.GeoCoord{
 		Latitude:  latlon.Lat,
 		Longitude: latlon.Lon}, resolution)
