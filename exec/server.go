@@ -70,7 +70,7 @@ func main() {
 		}
 
 		// Search
-		o, err := g.Search(q)
+		o, err := g.Routing(q)
 		if err != nil {
 			fmt.Println(err)
 		}

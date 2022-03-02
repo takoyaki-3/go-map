@@ -24,7 +24,7 @@ type cfb struct {
 }
 
 //
-func (g *Graph) Search(query Query) (Output, error) {
+func (g *Graph) Routing(query Query) (Output, error) {
 
 	q := prioque.NewMinSet()
 	cfbs := make([]cfb, len(g.Nodes))
