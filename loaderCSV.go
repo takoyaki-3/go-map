@@ -68,6 +68,8 @@ func (g *Graph) AddStopsFromCSV(stopFileName string) (err error) {
 		g.stopId2index[s.ID] = i
 		g.stopId2node[s.ID] = ni
 		g.Nodes = append(g.Nodes, n)
+		g.FromEdges = append(g.FromEdges, []int{})
+		g.ToEdges = append(g.ToEdges, []int{})
 
 		// 近くの道路へ接続
 		nearestNode := g.FindNode(h3indexes, n, 9)
@@ -75,11 +77,24 @@ func (g *Graph) AddStopsFromCSV(stopFileName string) (err error) {
 			continue
 		}
 		cost := HubenyDistance(g.Nodes[nearestNode], n)
+
+		ei := len(g.Edges)
 		g.Edges = append(g.Edges, Edge{
 			FromNode: nearestNode,
 			ToNode:   ni,
 			Weight:   cost,
 		})
+		g.FromEdges[nearestNode] = append(g.FromEdges[ni], nearestNode)
+		g.ToEdges[ni] = append(g.ToEdges[ni], ei)
+
+		ei = len(g.Edges)
+		g.Edges = append(g.Edges, Edge{
+			FromNode: ni,
+			ToNode:   nearestNode,
+			Weight:   cost,
+		})
+		g.FromEdges[ni] = append(g.FromEdges[ni], ei)
+		g.ToEdges[nearestNode] = append(g.FromEdges[nearestNode], ei)
 	}
 
 	return nil
