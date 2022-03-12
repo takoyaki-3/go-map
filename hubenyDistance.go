@@ -4,6 +4,7 @@ import (
 	"math"
 )
 
+// 以下、https://qiita.com/tmnck/items/30b42ba5df28c38b0f89 様の記事を一部改変の上，利用しております。
 func HubenyDistance(src, dst Node) float64 {
 	dx := degree2radian(dst.Lon - src.Lon)
 	dy := degree2radian(dst.Lat - src.Lat)
