@@ -1,4 +1,4 @@
-module github.com/takoyaki-3/go-map
+module github.com/takoyaki-3/go-map/v2
 
 go 1.15
 
