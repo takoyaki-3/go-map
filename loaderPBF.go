@@ -4,7 +4,6 @@ import (
 	"io/ioutil"
 
 	"github.com/golang/protobuf/proto"
-	"github.com/takoyaki-3/go-gtfs"
 	"github.com/takoyaki-3/go-map/pb"
 )
 
@@ -52,7 +51,7 @@ func LoadFromPath(filename string) (*Graph, error) {
 	}
 
 	for i, s := range graph.Stop {
-		g.Stops = append(g.Stops, gtfs.Stop{
+		g.Stops = append(g.Stops, Stop{
 			ID:          s.StopId,
 			Code:        s.StopCode,
 			Name:        s.StopName,

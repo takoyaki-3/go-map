@@ -1,20 +1,30 @@
 package gomap
 
-import (
-	gtfs "github.com/takoyaki-3/go-gtfs"
-)
+import ()
 
 type Graph struct {
 	Nodes        []Node
 	Edges        []Edge
 	FromEdges    [][]int
 	ToEdges      [][]int
-	Stops        []gtfs.Stop
+	Stops        []Stop
 	stopId2index map[string]int
 	stopId2node  map[string]int
 }
 
-func (g *Graph) GetStop(stopId string) gtfs.Stop {
+type Stop struct {
+	ID          string  `csv:"stop_id" json:"trip_id"`
+	Code        string  `csv:"stop_code" json:"stop_code"`
+	Name        string  `csv:"stop_name" json:"stop_name"`
+	Description string  `csv:"stop_desc" json:"stop_desc"`
+	Latitude    float64 `csv:"stop_lat" json:"stop_lat"`
+	Longitude   float64 `csv:"stop_lon" json:"stop_lon"`
+	ZoneID      string  `csv:"zone_id" json:"zone_id"`
+	Type        string  `csv:"location_type" json:"location_type"`
+	Parent      string  `csv:"parent_station" json:"parent_station"`
+}
+
+func (g *Graph) GetStop(stopId string) Stop {
 	return g.Stops[g.stopId2index[stopId]]
 }
 
