@@ -4,7 +4,7 @@ import (
 	"io/ioutil"
 
 	"github.com/golang/protobuf/proto"
-	"github.com/takoyaki-3/go-map/pb"
+	"github.com/takoyaki-3/go-map/v2/pb"
 )
 
 // Load Protocol Buffer

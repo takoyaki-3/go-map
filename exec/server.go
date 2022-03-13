@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"strconv"
 
-	gm "github.com/takoyaki-3/go-map"
+	gm "github.com/takoyaki-3/go-map/v2"
 )
 
 func main() {

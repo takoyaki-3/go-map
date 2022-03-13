@@ -4,7 +4,7 @@ import (
 	"errors"
 	"math"
 
-	"github.com/takoyaki-3/go-map/prioque"
+	"github.com/takoyaki-3/go-map/v2/prioque"
 )
 
 type Query struct {

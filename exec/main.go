@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	gm "github.com/takoyaki-3/go-map"
+	gm "github.com/takoyaki-3/go-map/v2"
 )
 
 func main() {
