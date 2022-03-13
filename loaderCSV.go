@@ -1,6 +1,6 @@
 package gomap
 
-import csvtag "github.com/artonge/go-csv-tag/v2"
+import csvtag "github.com/takoyaki-3/go-csv-tag/v3"
 
 func LoadCSV(nodeFileName, edgeFileName string) (g *Graph, err error) {
 
